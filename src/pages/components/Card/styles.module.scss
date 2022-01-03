@@ -1,0 +1,29 @@
+.container {
+  width: 320px;
+  height: 125px;
+  background-color: var(--blue-700);
+  padding: 1.5rem 2.5rem;
+  border: 1px solid #fff;
+  border-radius: 1rem;
+  color: var(--white);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: filter 0.2s;
+
+  &:hover {
+    filter: brightness(0.8);
+  }
+
+  div {
+    width: 100%;
+
+    h1 {
+      color: var(--green);
+      font-size: 1.5rem;
+    }
+  }
+}
+
