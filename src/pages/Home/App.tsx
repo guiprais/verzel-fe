@@ -1,11 +1,12 @@
 import { Card } from '../components/Card';
+import { Header } from '../components/Header';
 
 import styles from './styles.module.scss';
 
 export const App = () => {
   return (
-    <div>
-      <h1>Hello World!</h1>
+    <div className={styles.container}>
+      <Header />
       <div className={styles.cardsContainer}>
         <Card name="Introdução e Preparatório" classes="3/3 aulas" />
         <Card name="Conceito de Sistemas" classes="4/4 aulas" />
