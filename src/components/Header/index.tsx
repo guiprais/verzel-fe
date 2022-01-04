@@ -6,7 +6,9 @@ export const Header = () => {
       <h1>Logo</h1>
       <nav>
         <ul>
-          <li>+ Cadastro de Aula</li>
+          <li>
+            <button type="button">+ Cadastro de Aula</button>{' '}
+          </li>
           <li>+ Cadastro de Módulo</li>
         </ul>
       </nav>
