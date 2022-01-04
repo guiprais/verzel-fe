@@ -8,4 +8,8 @@ export default {
   getModules: async () => {
     return api.get('/modules');
   },
+
+  getClasses: async () => {
+    return api.get('/classes');
+  },
 };

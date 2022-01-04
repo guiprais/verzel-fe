@@ -2,7 +2,7 @@ import styles from './styles.module.scss';
 
 type CardProps = {
   name: string;
-  classes: string;
+  classes: number;
 };
 
 export const Card = ({ name, classes }: CardProps) => {
@@ -10,7 +10,9 @@ export const Card = ({ name, classes }: CardProps) => {
     <button type="button" className={styles.container}>
       <div>
         <h1>{name}</h1>
-        <span>{classes}</span>
+        <span>
+          {classes} {classes > 1 ? 'aulas' : 'aula'}
+        </span>
       </div>
     </button>
   );
