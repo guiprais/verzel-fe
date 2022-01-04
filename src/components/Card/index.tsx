@@ -3,6 +3,7 @@ import styles from './styles.module.scss';
 type CardProps = {
   name: string;
   classes: number;
+  id: string;
 };
 
 export const Card = ({ name, classes }: CardProps) => {

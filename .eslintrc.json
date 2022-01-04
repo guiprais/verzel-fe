@@ -56,7 +56,8 @@
         "namedComponents": "arrow-function"
       }
     ],
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    "react/no-unused-prop-types": "off"
   },
   "settings": {
     "import/resolver": {
