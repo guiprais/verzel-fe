@@ -20,9 +20,23 @@ type ClassesProps = {
   name: string;
 };
 
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    width: '40%',
+    height: '40%',
+  },
+};
+
 Modal.setAppElement('#root');
 
 export const App = () => {
+  let subtitle: any;
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modulos, setModulos] = useState<ModulesProps[]>([]);
   const [classes, setClasses] = useState<ClassesProps[]>([]);
@@ -69,10 +83,14 @@ export const App = () => {
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
-        // contentLabel="Example Modal"
+        style={customStyles}
       >
-        <button type="button" onClick={closeModal}>
-          Close
+        <button
+          className={styles.closeButton}
+          type="button"
+          onClick={closeModal}
+        >
+          X
         </button>
         <FormModal />
       </Modal>

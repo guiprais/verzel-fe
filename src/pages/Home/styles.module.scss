@@ -29,4 +29,21 @@
   }
 }
 
+.closeButton {
+  position: absolute;
+  right: 1.5rem;
+  top: 1.5rem;
+  width: 2rem;
+  height: 2rem;
+  opacity: 0.3;
+  border-radius: 0.4rem;
 
+  transition: all 0.2s;
+
+  &:hover {
+    opacity: 1;
+    background-color: transparent;
+    border: 1px solid var(--red);
+    color: var(--red);
+  }
+}

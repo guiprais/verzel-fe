@@ -24,14 +24,14 @@ export const FormModal = () => {
   return (
     <form className={styles.container}>
       <label htmlFor="name">
-        Nome do Módulo:{' '}
+        <h3>Nome do Módulo: </h3>
         <input
           id="name"
           type="text"
           value={name}
           onChange={({ target }) => setName(target.value)}
         />
-        {error}
+        <span>{error}</span>
       </label>
 
       <button type="submit" onClick={event => handleSubmit(event)}>

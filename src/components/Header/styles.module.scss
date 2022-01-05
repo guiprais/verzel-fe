@@ -11,13 +11,6 @@
     list-style: none;
 
     li {
-      padding: 1.5rem;
-
-      transition: all 0.3s ease;
-
-      &:hover {
-        background-color: var(--green);
-      }
 
       button {
         background: none;
@@ -27,6 +20,14 @@
         font: inherit;
         cursor: pointer;
         outline: inherit;
+
+        padding: 1.5rem;
+
+        transition: all 0.3s ease;
+
+        &:hover {
+          background-color: var(--green);
+        }
       }
     }
   }
