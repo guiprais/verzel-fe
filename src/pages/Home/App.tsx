@@ -7,6 +7,7 @@ import { Header } from '../../components/Header';
 import api from '../../services/api';
 
 import styles from './styles.module.scss';
+import { ClassesForm } from '../../components/ClassesForm';
 
 type ModulesProps = {
   id: string;
@@ -39,6 +40,7 @@ export const App = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modulos, setModulos] = useState<ModulesProps[]>([]);
   const [classes, setClasses] = useState<ClassesProps[]>([]);
+  const [modulesForm, setModulesForm] = useState(false);
 
   useEffect(() => {
     api.getModules().then(response => setModulos(response.data));
@@ -49,18 +51,27 @@ export const App = () => {
     return classes.filter(c => c.module_id === id).length;
   };
 
-  const openModal = () => {
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  const handleClassModal = () => {
+    setModulesForm(false);
     setIsOpen(true);
   };
 
-  const closeModal = () => {
-    setIsOpen(false);
+  const handleModuleModal = () => {
+    setModulesForm(true);
+    setIsOpen(true);
   };
 
   return (
     <>
       <div className={styles.container}>
-        <Header openModal={openModal} />
+        <Header
+          openModuleModal={handleModuleModal}
+          openClassModal={handleClassModal}
+        />
         <section className={styles.cardsSection}>
           <h1>Módulos</h1>
           <div className={styles.cardsContainer}>
@@ -91,7 +102,11 @@ export const App = () => {
         >
           X
         </button>
-        <ModuleForm />
+        {modulesForm ? (
+          <ModuleForm modulos={modulos} setModulos={setModulos} />
+        ) : (
+          <ClassesForm />
+        )}
       </Modal>
     </>
   );

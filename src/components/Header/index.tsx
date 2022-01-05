@@ -1,21 +1,23 @@
 import styles from './styles.module.scss';
 
 type Props = {
-  openModal: any;
-  // closeModal: void;
+  openModuleModal: () => void;
+  openClassModal: () => void;
 };
 
-export const Header = ({ openModal }: Props) => {
+export const Header = ({ openModuleModal, openClassModal }: Props) => {
   return (
     <div className={styles.container}>
       <h1>Logo</h1>
       <nav>
         <ul>
           <li>
-            <button type="button">+ Cadastro de Aula</button>
+            <button type="button" onClick={openClassModal}>
+              + Cadastro de Aula
+            </button>
           </li>
           <li>
-            <button type="button" onClick={openModal}>
+            <button type="button" onClick={openModuleModal}>
               + Cadastro de Módulo
             </button>
           </li>
