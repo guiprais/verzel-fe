@@ -2,25 +2,39 @@ import { MouseEvent, useState } from 'react';
 import api from '../../services/api';
 import styles from './styles.module.scss';
 
-export const ClassesForm = () => {
+type ModuleType = {
+  name: string;
+  id: string;
+};
+
+type ModuleFormProps = {
+  modulos: ModuleType[];
+};
+
+export const ClassesForm = ({ modulos }: ModuleFormProps) => {
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
-  const [modulo, setModulo] = useState('');
+  const [modId, setModId] = useState(modulos.length > 0 ? modulos[0].id : '');
   const [error, setError] = useState('');
+  const [created, setCreated] = useState('');
 
   const handleSubmit = async (event: MouseEvent) => {
     event.preventDefault();
 
-    const create = await api.createModule(name);
+    const createClass = await api.createClass({ name, date, modId });
 
-    if (create.error) {
-      setError(create.error);
-    } else {
-      setError('');
+    if (createClass.error) {
+      setCreated('');
+      setError(createClass.error);
+      return createClass;
     }
 
-    setName('');
-    return create;
+    if (createClass.status === 200) {
+      setError('');
+      setCreated('Aula criada com sucesso!');
+    }
+
+    return createClass;
   };
 
   return (
@@ -33,29 +47,29 @@ export const ClassesForm = () => {
           value={name}
           onChange={({ target }) => setName(target.value)}
         />
-        <span>{error}</span>
       </label>
 
       <label htmlFor="name">
         <h3>Data da Aula: </h3>
         <input
           id="name"
-          type="text"
+          type="date"
           value={date}
           onChange={({ target }) => setDate(target.value)}
         />
-        <span>{error}</span>
       </label>
 
       <label htmlFor="name">
         <h3>Módulo: </h3>
-        <input
-          id="name"
-          type="text"
-          value={modulo}
-          onChange={({ target }) => setModulo(target.value)}
-        />
-        <span>{error}</span>
+        <select id="name" onChange={({ target }) => setModId(target.value)}>
+          {modulos.map(m => (
+            <option key={m.id} value={m.id}>
+              {m.name}
+            </option>
+          ))}
+        </select>
+        <span className={styles.error}>{error}</span>
+        <span className={styles.created}>{created}</span>
       </label>
 
       <button type="submit" onClick={event => handleSubmit(event)}>

@@ -32,7 +32,7 @@ const customStyles = {
     width: '40%',
     minWidth: '400px',
     height: '40%',
-    minHeight: '400px',
+    minHeight: '500px',
   },
 };
 
@@ -107,7 +107,7 @@ export const App = () => {
         {modulesForm ? (
           <ModuleForm modulos={modulos} setModulos={setModulos} />
         ) : (
-          <ClassesForm />
+          <ClassesForm modulos={modulos} />
         )}
       </Modal>
     </>

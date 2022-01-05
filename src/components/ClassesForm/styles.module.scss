@@ -15,7 +15,8 @@
   label {
     margin: 0.4rem 0;
 
-    input {
+    input,
+    select {
       padding: 0.5rem;
       border: 1px solid var(--gray-900);
       border-radius: 10px;
