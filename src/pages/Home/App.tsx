@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 
-import { Card } from '../../components/Card';
+import { ModuleCard } from '../../components/ModuleCard';
 import { ModuleForm } from '../../components/ModuleForm';
 import { Header } from '../../components/Header';
 import api from '../../services/api';
 
 import styles from './styles.module.scss';
 import { ClassesForm } from '../../components/ClassesForm';
+import { ClassesCard } from '../../components/ClassesCard';
 
 type ModulesProps = {
   id: string;
@@ -43,6 +44,8 @@ export const App = () => {
   const [modulos, setModulos] = useState<ModulesProps[]>([]);
   const [classes, setClasses] = useState<ClassesProps[]>([]);
   const [modulesForm, setModulesForm] = useState(false);
+  const [classesActives, setClassesActives] = useState<ClassesProps[]>([]);
+  // const [moduleActive, setModuleActive] = useState();
 
   useEffect(() => {
     api.getModules().then(response => setModulos(response.data));
@@ -67,6 +70,12 @@ export const App = () => {
     setIsOpen(true);
   };
 
+  const handleModuleActive = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const target = event.target as Element;
+    const teste = classes.filter(c => c.module_id === target.id);
+    setClassesActives(teste);
+  };
+
   return (
     <>
       <div className={styles.container}>
@@ -79,7 +88,8 @@ export const App = () => {
           <div className={styles.cardsContainer}>
             {modulos.length !== 0 ? (
               modulos.map(modulo => (
-                <Card
+                <ModuleCard
+                  activeModule={handleModuleActive}
                   key={modulo.id}
                   id={modulo.id}
                   name={modulo.name}
@@ -95,10 +105,15 @@ export const App = () => {
         <section className={styles.classesSection}>
           <h1>Aulas</h1>
           <div className={styles.classesContainer}>
-            {classes &&
-              classes.map(c => (
-                <Card key={c.id} name={c.name} classDate={c.class_date} />
-              ))}
+            {classesActives.length !== 0
+              ? classesActives.map(c => (
+                  <ClassesCard
+                    key={c.id}
+                    name={c.name}
+                    classDate={c.class_date}
+                  />
+                ))
+              : 'Nenhuma aula encontrada :('}
           </div>
         </section>
       </div>
