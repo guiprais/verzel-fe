@@ -20,7 +20,9 @@ export const ModuleForm = ({ modulos, setModulos }: ModuleFormProps) => {
   const handleSubmit = async (event: MouseEvent) => {
     event.preventDefault();
 
-    const create = await api.createModule(name);
+    const token = localStorage.getItem('@verzel:token');
+
+    const create = await api.createModule(name, token);
 
     if (create.error) {
       setCreated('');

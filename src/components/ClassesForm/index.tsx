@@ -34,7 +34,9 @@ export const ClassesForm = ({
   const handleSubmit = async (event: MouseEvent) => {
     event.preventDefault();
 
-    const createClass = await api.createClass({ name, date, modId });
+    const token = localStorage.getItem('@verzel:token');
+
+    const createClass = await api.createClass(token, { name, date, modId });
 
     if (createClass.error) {
       setCreated('');
