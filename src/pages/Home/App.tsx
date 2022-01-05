@@ -30,7 +30,9 @@ const customStyles = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
     width: '40%',
+    minWidth: '400px',
     height: '40%',
+    minHeight: '400px',
   },
 };
 

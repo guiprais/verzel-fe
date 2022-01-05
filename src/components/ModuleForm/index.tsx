@@ -2,9 +2,14 @@ import { MouseEvent, useState } from 'react';
 import api from '../../services/api';
 import styles from './styles.module.scss';
 
+type ModuleType = {
+  name: string;
+  id: string;
+};
+
 type ModuleFormProps = {
-  modulos: any;
-  setModulos: any;
+  modulos: ModuleType[];
+  setModulos: React.Dispatch<React.SetStateAction<ModuleType[]>>;
 };
 
 export const ModuleForm = ({ modulos, setModulos }: ModuleFormProps) => {
