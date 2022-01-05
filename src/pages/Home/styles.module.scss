@@ -27,6 +27,32 @@
       }
     }
   }
+
+  .classesSection {
+    width: 90%;
+    margin: 0 auto;
+
+    > h1 {
+      font-size: 3rem;
+      font-weight: 300;
+      margin: 2rem 0 1rem;
+    }
+
+    .classesContainer {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+
+      button {
+        margin: 2rem 1rem;
+      }
+
+      > span {
+        font-size: 2rem;
+        font-weight: 300;
+      }
+    }
+  }
 }
 
 .closeButton {

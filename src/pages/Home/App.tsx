@@ -91,6 +91,16 @@ export const App = () => {
             )}
           </div>
         </section>
+
+        <section className={styles.classesSection}>
+          <h1>Aulas</h1>
+          <div className={styles.classesContainer}>
+            {classes &&
+              classes.map(c => (
+                <Card key={c.id} name={c.name} classDate={c.class_date} />
+              ))}
+          </div>
+        </section>
       </div>
       <Modal
         isOpen={modalIsOpen}
