@@ -7,11 +7,24 @@ type ModuleType = {
   id: string;
 };
 
-type ModuleFormProps = {
-  modulos: ModuleType[];
+type ClassesType = {
+  class_date: string;
+  id: string;
+  module_id: string;
+  name: string;
 };
 
-export const ClassesForm = ({ modulos }: ModuleFormProps) => {
+type ModuleFormProps = {
+  modulos: ModuleType[];
+  classes: ClassesType[];
+  setClasses: React.Dispatch<React.SetStateAction<ClassesType[]>>;
+};
+
+export const ClassesForm = ({
+  modulos,
+  classes,
+  setClasses,
+}: ModuleFormProps) => {
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
   const [modId, setModId] = useState(modulos.length > 0 ? modulos[0].id : '');
@@ -32,6 +45,10 @@ export const ClassesForm = ({ modulos }: ModuleFormProps) => {
     if (createClass.status === 200) {
       setError('');
       setCreated('Aula criada com sucesso!');
+      setName('');
+      setDate('');
+      const newClasses = [...classes, createClass.data];
+      setClasses(newClasses);
     }
 
     return createClass;

@@ -89,7 +89,7 @@ export const App = () => {
             {modulos.length !== 0 ? (
               modulos.map(modulo => (
                 <ModuleCard
-                  activeModule={handleModuleActive}
+                  handleModuleActive={handleModuleActive}
                   key={modulo.id}
                   id={modulo.id}
                   name={modulo.name}
@@ -132,7 +132,11 @@ export const App = () => {
         {modulesForm ? (
           <ModuleForm modulos={modulos} setModulos={setModulos} />
         ) : (
-          <ClassesForm modulos={modulos} />
+          <ClassesForm
+            modulos={modulos}
+            classes={classes}
+            setClasses={setClasses}
+          />
         )}
       </Modal>
     </>

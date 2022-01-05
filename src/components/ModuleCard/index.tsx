@@ -4,7 +4,7 @@ type ModuleCardProps = {
   name: string;
   classes: number;
   id: string;
-  activeModule?: any;
+  handleModuleActive?: any;
   // onClick?: React.MouseEventHandler<MouseEvent>;
 };
 
@@ -12,12 +12,12 @@ export const ModuleCard = ({
   name,
   classes,
   id,
-  activeModule,
+  handleModuleActive,
 }: ModuleCardProps) => {
   return (
     <button
       id={id}
-      onClick={event => activeModule(event)}
+      onClick={event => handleModuleActive(event)}
       type="button"
       className={styles.container}
     >
