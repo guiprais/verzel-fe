@@ -16,7 +16,7 @@ export default {
   createModule: async (name: string) => {
     return api
       .post('/modules', { name })
-      .then(response => response.data)
+      .then(response => response)
       .catch(error => error.response.data);
     // console.log(module.re);
     // return module;

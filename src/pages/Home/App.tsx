@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 
 import { Card } from '../../components/Card';
-import { FormModal } from '../../components/FormModal';
+import { ModuleForm } from '../../components/ModuleForm';
 import { Header } from '../../components/Header';
 import api from '../../services/api';
 
@@ -36,7 +36,6 @@ const customStyles = {
 Modal.setAppElement('#root');
 
 export const App = () => {
-  let subtitle: any;
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modulos, setModulos] = useState<ModulesProps[]>([]);
   const [classes, setClasses] = useState<ClassesProps[]>([]);
@@ -92,7 +91,7 @@ export const App = () => {
         >
           X
         </button>
-        <FormModal />
+        <ModuleForm />
       </Modal>
     </>
   );
