@@ -21,15 +21,8 @@ export const App = () => {
   const [showEditForm, setShowEditForm] = useState(false);
 
   const { modules, getModule, moduleActive, setModuleActive } = useModulesApi();
-  const { classes, setClasses, classesActives, setClassesActives } =
-    useClassesApi();
-  const {
-    modalIsOpen,
-    modulesForm,
-    closeModal,
-    handleOpenClassModal,
-    handleOpenModuleModal,
-  } = useModal();
+  const { classes, classesActives, setClassesActives } = useClassesApi();
+  const { modulesForm, closeModal } = useModal();
 
   // Função para calcular quantas aulas existem em cada módulo
   const classesQuantity = (id: string) => {
@@ -88,10 +81,7 @@ export const App = () => {
   return (
     <>
       <div className={styles.container}>
-        <Header
-          openModuleModal={handleOpenModuleModal}
-          openClassModal={handleOpenClassModal}
-        />
+        <Header />
 
         <section className={styles.cardsSection}>
           <h1>
@@ -114,7 +104,7 @@ export const App = () => {
           </div>
         </section>
       </div>
-      <Modal isOpen={modalIsOpen} handleModal={closeModal}>
+      <Modal>
         <button
           className={styles.closeButton}
           type="button"
@@ -122,15 +112,7 @@ export const App = () => {
         >
           X
         </button>
-        {modulesForm ? (
-          <ModuleForm />
-        ) : (
-          <ClassesForm
-            modulos={modules}
-            classes={classes}
-            setClasses={setClasses}
-          />
-        )}
+        {modulesForm ? <ModuleForm /> : <ClassesForm />}
       </Modal>
     </>
   );

@@ -1,8 +1,7 @@
 import ReactModal from 'react-modal';
+import { useModal } from '../../hooks/useModal';
 
 type ModalProps = {
-  isOpen: boolean;
-  handleModal: () => void;
   children: React.ReactNode;
 };
 
@@ -23,11 +22,13 @@ const customStyles = {
 
 ReactModal.setAppElement('#root');
 
-export const Modal = ({ isOpen, handleModal, children }: ModalProps) => {
+export const Modal = ({ children }: ModalProps) => {
+  const { modalIsOpen, closeModal } = useModal();
+
   return (
     <ReactModal
-      isOpen={isOpen}
-      onRequestClose={handleModal}
+      isOpen={modalIsOpen}
+      onRequestClose={closeModal}
       style={customStyles}
     >
       {children}

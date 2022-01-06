@@ -1,33 +1,16 @@
 import { MouseEvent, useState } from 'react';
+import { useClassesApi } from '../../hooks/useClassesApi';
+import { useModulesApi } from '../../hooks/useModulesApi';
 import api from '../../services/api';
 import styles from './styles.module.scss';
 
-type ModuleType = {
-  name: string;
-  id: string;
-};
+export const ClassesForm = () => {
+  const { modules } = useModulesApi();
+  const { classes, setClasses } = useClassesApi();
 
-type ClassesType = {
-  class_date: string;
-  id: string;
-  module_id: string;
-  name: string;
-};
-
-type ModuleFormProps = {
-  modulos: ModuleType[];
-  classes: ClassesType[];
-  setClasses: React.Dispatch<React.SetStateAction<ClassesType[]>>;
-};
-
-export const ClassesForm = ({
-  modulos,
-  classes,
-  setClasses,
-}: ModuleFormProps) => {
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
-  const [modId, setModId] = useState(modulos.length > 0 ? modulos[0].id : '');
+  const [modId, setModId] = useState(modules.length > 0 ? modules[0].id : '');
   const [error, setError] = useState('');
   const [created, setCreated] = useState('');
 
@@ -79,7 +62,7 @@ export const ClassesForm = ({
       <label htmlFor="name">
         <h3>Módulo: </h3>
         <select id="name" onChange={({ target }) => setModId(target.value)}>
-          {modulos.map(m => (
+          {modules.map(m => (
             <option key={m.id} value={m.id}>
               {m.name}
             </option>

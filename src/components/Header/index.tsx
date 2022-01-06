@@ -1,23 +1,21 @@
+import { useModal } from '../../hooks/useModal';
 import styles from './styles.module.scss';
 
-type Props = {
-  openModuleModal: () => void;
-  openClassModal: () => void;
-};
+export const Header = () => {
+  const { handleOpenModuleModal, handleOpenClassModal } = useModal();
 
-export const Header = ({ openModuleModal, openClassModal }: Props) => {
   return (
     <div className={styles.container}>
       <h1>Logo</h1>
       <nav>
         <ul>
           <li>
-            <button type="button" onClick={openClassModal}>
+            <button type="button" onClick={handleOpenClassModal}>
               + Cadastro de Aula
             </button>
           </li>
           <li>
-            <button type="button" onClick={openModuleModal}>
+            <button type="button" onClick={handleOpenModuleModal}>
               + Cadastro de Módulo
             </button>
           </li>
