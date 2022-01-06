@@ -13,36 +13,27 @@ import { ClassesForm } from '../../components/ClassesForm';
 import { ClassesCard } from '../../components/ClassesCard';
 import { useModulesApi } from '../../hooks/useModulesApi';
 import { useClassesApi } from '../../hooks/useClassesApi';
+import { useModal } from '../../hooks/useModal';
 
 export const App = () => {
-  const [modalIsOpen, setIsOpen] = useState(false);
-  const [modulesForm, setModulesForm] = useState(false);
-  const [moduleActive, setModuleActive] = useState('Módulos');
   const [showModules, setShowModules] = useState(true);
   const [showClasses, setShowClasses] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
 
-  const { modules, getModule } = useModulesApi();
+  const { modules, getModule, moduleActive, setModuleActive } = useModulesApi();
   const { classes, setClasses, classesActives, setClassesActives } =
     useClassesApi();
+  const {
+    modalIsOpen,
+    modulesForm,
+    closeModal,
+    handleOpenClassModal,
+    handleOpenModuleModal,
+  } = useModal();
 
   // Função para calcular quantas aulas existem em cada módulo
   const classesQuantity = (id: string) => {
     return classes.filter(c => c.module_id === id).length;
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-  };
-
-  const handleOpenClassModal = () => {
-    setModulesForm(false);
-    setIsOpen(true);
-  };
-
-  const handleOpenModuleModal = () => {
-    setModulesForm(true);
-    setIsOpen(true);
   };
 
   const handleModuleActive = (event: React.MouseEvent<HTMLButtonElement>) => {

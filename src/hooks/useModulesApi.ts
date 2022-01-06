@@ -12,7 +12,7 @@ type createModuleApiProps = {
 
 export const useModulesApi = () => {
   const [modules, setModules] = useState<ModulesProps[]>([]);
-  const [moduleActive, setModuleActive] = useState('');
+  const [moduleActive, setModuleActive] = useState('Módulos');
   const [infoCreateModule, setInfoCreateModule] = useState<string>('');
 
   const createModule = async ({ moduleName }: createModuleApiProps) => {
