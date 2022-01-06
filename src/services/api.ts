@@ -6,8 +6,13 @@ type CreateClassType = {
   modId: string;
 };
 
+const token = localStorage.getItem('@verzel:token');
+
 const api = axios.create({
   baseURL: 'http://localhost:3333',
+  headers: {
+    authorization: `Bearer ${token}` ?? '',
+  },
 });
 
 export default {
@@ -19,35 +24,16 @@ export default {
     return api.get('/classes');
   },
 
-  createModule: async (name: string, token: string | null) => {
+  createModule: async (name: string) => {
     return api
-      .post(
-        '/modules',
-        { name },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      )
+      .post('/modules', { name })
       .then(response => response)
       .catch(error => error.response.data);
   },
 
-  createClass: async (
-    token: string | null,
-    { name, date, modId }: CreateClassType,
-  ) => {
+  createClass: async ({ name, date, modId }: CreateClassType) => {
     return api
-      .post(
-        '/classes',
-        { name, class_date: date, module_id: modId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      )
+      .post('/classes', { name, class_date: date, module_id: modId })
       .then(response => response)
       .catch(error => error.response.data);
   },

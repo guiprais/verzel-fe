@@ -1,53 +1,28 @@
 import { MouseEvent, useState } from 'react';
-import api from '../../services/api';
+import { useModulesApi } from '../../hooks/useModulesApi';
+
 import styles from './styles.module.scss';
 
-type ModuleType = {
-  name: string;
-  id: string;
-};
-
-type ModuleFormProps = {
-  modulos: ModuleType[];
-  setModulos: React.Dispatch<React.SetStateAction<ModuleType[]>>;
-};
-
-export const ModuleForm = ({ modulos, setModulos }: ModuleFormProps) => {
-  const [name, setName] = useState('');
+export const ModuleForm = () => {
+  const [moduleName, setModuleName] = useState('');
   const [error, setError] = useState('');
   const [created, setCreated] = useState('');
+
+  const { createModule } = useModulesApi();
 
   const handleSubmit = async (event: MouseEvent) => {
     event.preventDefault();
 
-    const token = localStorage.getItem('@verzel:token');
+    const createdModuleResponse = await createModule({ moduleName });
 
-    const create = await api.createModule(name, token);
-
-    if (create.error) {
+    if (!createdModuleResponse.success) {
       setCreated('');
-      setError(create.error);
-      return create;
+      setError(createdModuleResponse.error);
+      return;
     }
 
-    if (create.status === 200) {
-      setError('');
-      setCreated('Módulo criado com sucesso!');
-      setName('');
-      const newModulos = [...modulos, create.data];
-      const modulosSortByName = newModulos.sort((a, b) =>
-        // função para organizar o array de objetos 'newModulos' por ordem alfabética da key name
-        // eslint-disable-next-line no-nested-ternary
-        a.name > b.name ? 1 : b.name > a.name ? -1 : 0,
-      );
-      setModulos(modulosSortByName);
-      return create;
-    }
-
-    setCreated('');
     setError('');
-    setName('');
-    return create;
+    setCreated('Módulo criado com sucesso!');
   };
 
   return (
@@ -57,8 +32,8 @@ export const ModuleForm = ({ modulos, setModulos }: ModuleFormProps) => {
         <input
           id="name"
           type="text"
-          value={name}
-          onChange={({ target }) => setName(target.value)}
+          value={moduleName}
+          onChange={({ target }) => setModuleName(target.value)}
         />
         <span className={styles.error}>{error}</span>
         <span className={styles.created}>{created}</span>

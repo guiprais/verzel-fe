@@ -13,11 +13,7 @@ import styles from './styles.module.scss';
 
 import { ClassesForm } from '../../components/ClassesForm';
 import { ClassesCard } from '../../components/ClassesCard';
-
-type ModulesProps = {
-  id: string;
-  name: string;
-};
+import { useModulesApi } from '../../hooks/useModulesApi';
 
 type ClassesProps = {
   class_date: string;
@@ -28,16 +24,16 @@ type ClassesProps = {
 
 export const App = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
-  const [modulos, setModulos] = useState<ModulesProps[]>([]);
   const [classes, setClasses] = useState<ClassesProps[]>([]);
   const [modulesForm, setModulesForm] = useState(false);
   const [classesActives, setClassesActives] = useState<ClassesProps[]>([]);
   const [moduleActive, setModuleActive] = useState('Módulos');
   const [showModules, setShowModules] = useState(true);
   const [showClasses, setShowClasses] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const { modules, getModule } = useModulesApi();
 
   useEffect(() => {
-    api.getModules().then(response => setModulos(response.data));
     api.getClasses().then(response => setClasses(response.data));
   }, []);
 
@@ -63,12 +59,12 @@ export const App = () => {
   const handleModuleActive = (event: React.MouseEvent<HTMLButtonElement>) => {
     const target = event.target as Element;
     // Função que, quando clica em um Módulo, pega o id dele, compara com o array de aulas e retorna apenas as aulas que fazem parte daquele módulo
-    const grades = classes.filter(c => c.module_id === target.id);
-    setClassesActives(grades);
+    const modulesQuantity = classes.filter(c => c.module_id === target.id);
+    setClassesActives(modulesQuantity);
 
-    const findModulo = modulos.find(m => m.id === target.id)?.name;
+    const findModulo = modules.find(m => m.id === target.id);
 
-    setModuleActive(findModulo as string);
+    setModuleActive(findModulo?.name as string);
     setShowModules(false);
     setShowClasses(true);
   };
@@ -77,6 +73,12 @@ export const App = () => {
     setModuleActive('Módulos');
     setShowModules(true);
     setShowClasses(false);
+  };
+
+  const handleEditModule = () => {
+    const moduleObject = getModule(moduleActive);
+
+    setShowEditForm(true);
   };
 
   return (
@@ -96,14 +98,14 @@ export const App = () => {
             )}
             {moduleActive !== 'Módulos' ? moduleActive : 'Módulos'}
             {moduleActive !== 'Módulos' && (
-              <button type="button" onClick={() => handleMoveBack()}>
+              <button type="button" onClick={() => handleEditModule()}>
                 <AiFillEdit />
               </button>
             )}
           </h1>
           <div className={styles.cardsContainer}>
-            {showModules && modulos.length !== 0
-              ? modulos.map(modulo => (
+            {showModules && modules.length !== 0
+              ? modules.map(modulo => (
                   <ModuleCard
                     handleModuleActive={handleModuleActive}
                     key={modulo.id}
@@ -135,10 +137,10 @@ export const App = () => {
           X
         </button>
         {modulesForm ? (
-          <ModuleForm modulos={modulos} setModulos={setModulos} />
+          <ModuleForm />
         ) : (
           <ClassesForm
-            modulos={modulos}
+            modulos={modules}
             classes={classes}
             setClasses={setClasses}
           />

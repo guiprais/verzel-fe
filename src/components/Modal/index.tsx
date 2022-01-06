@@ -1,10 +1,10 @@
-import { FC } from 'react';
 import ReactModal from 'react-modal';
 
-interface IProps {
+type ModalProps = {
   isOpen: boolean;
   handleModal: () => void;
-}
+  children: React.ReactNode;
+};
 
 const customStyles = {
   content: {
@@ -23,7 +23,7 @@ const customStyles = {
 
 ReactModal.setAppElement('#root');
 
-export const Modal: FC<IProps> = ({ isOpen, handleModal, children }) => {
+export const Modal = ({ isOpen, handleModal, children }: ModalProps) => {
   return (
     <ReactModal
       isOpen={isOpen}
