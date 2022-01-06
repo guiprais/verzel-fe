@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
-import Modal from 'react-modal';
+import React, { useEffect, useState } from 'react';
 import { BiArrowBack } from 'react-icons/bi';
+import { AiFillEdit } from 'react-icons/ai';
 
 import { ModuleCard } from '../../components/ModuleCard';
 import { ModuleForm } from '../../components/ModuleForm';
+import { Modal } from '../../components/Modal';
 import { Header } from '../../components/Header';
 
 import api from '../../services/api';
@@ -24,23 +25,6 @@ type ClassesProps = {
   module_id: string;
   name: string;
 };
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    width: '40%',
-    minWidth: '400px',
-    height: '40%',
-    minHeight: '500px',
-  },
-};
-
-Modal.setAppElement('#root');
 
 export const App = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -82,9 +66,9 @@ export const App = () => {
     const grades = classes.filter(c => c.module_id === target.id);
     setClassesActives(grades);
 
-    const findModulo = modulos.find(m => m.id === target.id);
+    const findModulo = modulos.find(m => m.id === target.id)?.name;
 
-    setModuleActive(findModulo?.name as string);
+    setModuleActive(findModulo as string);
     setShowModules(false);
     setShowClasses(true);
   };
@@ -111,6 +95,11 @@ export const App = () => {
               </button>
             )}
             {moduleActive !== 'Módulos' ? moduleActive : 'Módulos'}
+            {moduleActive !== 'Módulos' && (
+              <button type="button" onClick={() => handleMoveBack()}>
+                <AiFillEdit />
+              </button>
+            )}
           </h1>
           <div className={styles.cardsContainer}>
             {showModules && modulos.length !== 0
@@ -136,27 +125,8 @@ export const App = () => {
               : !showModules && <span>Nenhuma aula encontrada :(</span>}
           </div>
         </section>
-
-        {/* <section className={styles.classesSection}>
-          <h1>Aulas</h1>
-          <div className={styles.classesContainer}>
-            {classesActives.length !== 0
-              ? classesActives.map(c => (
-                  <ClassesCard
-                    key={c.id}
-                    name={c.name}
-                    classDate={c.class_date}
-                  />
-                ))
-              : 'Nenhuma aula encontrada :('}
-          </div>
-        </section> */}
       </div>
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        style={customStyles}
-      >
+      <Modal isOpen={modalIsOpen} handleModal={closeModal}>
         <button
           className={styles.closeButton}
           type="button"
