@@ -12,6 +12,11 @@ type ModulesProps = {
   name: string;
 };
 
+type GetModulesProps = {
+  id?: string;
+  name: string;
+};
+
 type CreateModuleApiProps = {
   moduleName: string;
 };
@@ -22,11 +27,13 @@ interface ModulesProviderProps {
 
 interface ModulesContextData {
   modules: ModulesProps[];
-  setModules: any;
+  setModules: React.Dispatch<React.SetStateAction<ModulesProps[]>>;
   moduleActive: ModulesProps;
-  setModuleActive: any;
-  createModule: any;
-  getModule: any;
+  setModuleActive: React.Dispatch<React.SetStateAction<ModulesProps>>;
+  createModule: ({
+    moduleName,
+  }: CreateModuleApiProps) => Promise<{ success: boolean; error: string }>;
+  getModule: GetModulesProps;
 }
 
 const ModulesContext = createContext<ModulesContextData>(

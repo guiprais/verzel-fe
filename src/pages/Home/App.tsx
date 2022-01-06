@@ -13,17 +13,31 @@ import { ClassesForm } from '../../components/ClassesForm';
 import { ClassesCard } from '../../components/ClassesCard';
 import { useModules } from '../../hooks/useModules';
 import { useClassesApi } from '../../hooks/useClassesApi';
-import { useModal } from '../../hooks/useModal';
 import { EditModuleForm } from '../../components/EditModuleForm';
 
 export const App = () => {
   const [showModules, setShowModules] = useState(true);
   const [showClasses, setShowClasses] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [modulesForm, setModulesForm] = useState(false);
 
   const { modules, moduleActive, setModuleActive } = useModules();
   const { classes, classesActives, setClassesActives } = useClassesApi();
-  const { modulesForm, closeModal } = useModal();
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  const handleOpenClassModal = () => {
+    setModulesForm(false);
+    setIsOpen(true);
+  };
+
+  const handleOpenModuleModal = () => {
+    setModulesForm(true);
+    setIsOpen(true);
+  };
 
   // Função para calcular quantas aulas existem em cada módulo
   const classesQuantity = (id: string) => {
@@ -87,7 +101,10 @@ export const App = () => {
   return (
     <>
       <div className={styles.container}>
-        <Header />
+        <Header
+          openModuleModal={handleOpenModuleModal}
+          openClassModal={handleOpenClassModal}
+        />
 
         <section className={styles.cardsSection}>
           <h1>
@@ -110,7 +127,7 @@ export const App = () => {
           </div>
         </section>
       </div>
-      <Modal>
+      <Modal isOpen={modalIsOpen} handleModal={closeModal}>
         <button
           className={styles.closeButton}
           type="button"
