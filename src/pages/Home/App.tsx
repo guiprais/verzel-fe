@@ -11,16 +11,17 @@ import styles from './styles.module.scss';
 
 import { ClassesForm } from '../../components/ClassesForm';
 import { ClassesCard } from '../../components/ClassesCard';
-import { useModulesApi } from '../../hooks/useModulesApi';
+import { useModules } from '../../hooks/useModules';
 import { useClassesApi } from '../../hooks/useClassesApi';
 import { useModal } from '../../hooks/useModal';
+import { EditModuleForm } from '../../components/EditModuleForm';
 
 export const App = () => {
   const [showModules, setShowModules] = useState(true);
   const [showClasses, setShowClasses] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
 
-  const { modules, getModule, moduleActive, setModuleActive } = useModulesApi();
+  const { modules, moduleActive, setModuleActive } = useModules();
   const { classes, classesActives, setClassesActives } = useClassesApi();
   const { modulesForm, closeModal } = useModal();
 
@@ -30,14 +31,16 @@ export const App = () => {
   };
 
   const handleModuleActive = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const target = event.target as Element;
     // Função que, quando clica em um Módulo, pega o id dele, compara com o array de aulas e retorna apenas as aulas que fazem parte daquele módulo
-    const modulesQuantity = classes.filter(c => c.module_id === target.id);
+    const modulesQuantity = classes.filter(
+      c => c.module_id === event.currentTarget.id,
+    );
     setClassesActives(modulesQuantity);
 
-    const findModulo = modules.find(m => m.id === target.id);
-
-    setModuleActive(findModulo?.name as string);
+    setModuleActive({
+      name: event.currentTarget.name,
+      id: event.currentTarget.id,
+    });
     setShowModules(false);
     setShowClasses(true);
   };
@@ -65,14 +68,17 @@ export const App = () => {
   };
 
   const handleMoveBack = () => {
-    setModuleActive('Módulos');
+    setModuleActive({
+      name: 'Módulos',
+      id: '',
+    });
     setShowModules(true);
     setShowClasses(false);
     setShowEditForm(false);
   };
 
   const handleEditModule = () => {
-    const moduleObject = getModule(moduleActive);
+    // const moduleObject = getModule(moduleActive);
 
     setShowEditForm(!showEditForm);
     setShowClasses(!showClasses);
@@ -85,13 +91,13 @@ export const App = () => {
 
         <section className={styles.cardsSection}>
           <h1>
-            {moduleActive !== 'Módulos' && (
+            {moduleActive.name !== 'Módulos' && (
               <button type="button" onClick={() => handleMoveBack()}>
                 <BiArrowBack />
               </button>
             )}
-            {moduleActive !== 'Módulos' ? moduleActive : 'Módulos'}
-            {moduleActive !== 'Módulos' && (
+            {moduleActive.name !== 'Módulos' ? moduleActive.name : 'Módulos'}
+            {moduleActive.name !== 'Módulos' && (
               <button type="button" onClick={() => handleEditModule()}>
                 <AiFillEdit />
               </button>
@@ -100,7 +106,7 @@ export const App = () => {
           <div className={styles.cardsContainer}>
             {showModules && showModulesContent()}
             {showClasses && showClassesContent()}
-            {showEditForm && <ModuleForm />}
+            {showEditForm && <EditModuleForm />}
           </div>
         </section>
       </div>

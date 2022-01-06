@@ -3,26 +3,28 @@ import { useModules } from '../../hooks/useModules';
 
 import styles from './styles.module.scss';
 
-export const ModuleForm = () => {
+export const EditModuleForm = () => {
   const [moduleName, setModuleName] = useState('');
   const [error, setError] = useState('');
   const [created, setCreated] = useState('');
 
-  const { createModule } = useModules();
+  const { moduleActive } = useModules();
 
   const handleSubmit = async (event: MouseEvent) => {
     event.preventDefault();
 
-    const createdModuleResponse = await createModule({ moduleName });
+    console.log(moduleActive);
 
-    if (!createdModuleResponse.success) {
-      setCreated('');
-      setError(createdModuleResponse.error);
-      return;
-    }
+    // const createdModuleResponse = await editModule({ moduleName });
+
+    // if (!createdModuleResponse.success) {
+    //   setCreated('');
+    //   setError(createdModuleResponse.error);
+    //   return;
+    // }
 
     setError('');
-    setCreated('Módulo criado com sucesso!');
+    setCreated('Módulo editado com sucesso!');
   };
 
   return (

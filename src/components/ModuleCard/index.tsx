@@ -17,6 +17,7 @@ export const ModuleCard = ({
   return (
     <button
       id={id}
+      name={name}
       onClick={event => handleModuleActive(event)}
       type="button"
       className={styles.container}
