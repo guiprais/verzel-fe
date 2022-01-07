@@ -1,12 +1,12 @@
 import { MouseEvent, useState } from 'react';
-import { useClassesApi } from '../../hooks/useClassesApi';
+import { useClasses } from '../../hooks/useClasses';
 import { useModules } from '../../hooks/useModules';
 import api from '../../services/api';
 import styles from './styles.module.scss';
 
 export const ClassesForm = () => {
   const { modules } = useModules();
-  const { classes, setClasses } = useClassesApi();
+  const { classes, setClasses } = useClasses();
 
   const [name, setName] = useState('');
   const [date, setDate] = useState('');

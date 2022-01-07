@@ -7,17 +7,20 @@ import './global.scss';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { ModulesProvider } from './hooks/useModules';
+import { ClassesProvider } from './hooks/useClasses';
 
 ReactDOM.render(
   <React.StrictMode>
     <ModulesProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      </BrowserRouter>
+      <ClassesProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<App />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </BrowserRouter>
+      </ClassesProvider>
     </ModulesProvider>
   </React.StrictMode>,
   document.getElementById('root'),

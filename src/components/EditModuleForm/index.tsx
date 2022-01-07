@@ -50,7 +50,7 @@ export const EditModuleForm = () => {
       </label>
 
       <button type="submit" onClick={event => handleSubmit(event)}>
-        Cadastrar módulo
+        Editar módulo
       </button>
     </form>
   );

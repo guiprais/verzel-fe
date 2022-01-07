@@ -12,7 +12,7 @@ import styles from './styles.module.scss';
 import { ClassesForm } from '../../components/ClassesForm';
 import { ClassesCard } from '../../components/ClassesCard';
 import { useModules } from '../../hooks/useModules';
-import { useClassesApi } from '../../hooks/useClassesApi';
+import { useClasses } from '../../hooks/useClasses';
 import { EditModuleForm } from '../../components/EditModuleForm';
 
 export const App = () => {
@@ -22,8 +22,17 @@ export const App = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modulesForm, setModulesForm] = useState(false);
 
+  const [moduleTitle, setModuleTitle] = useState(false);
+  const [classTitle, setClassTitle] = useState(false);
+
   const { modules, moduleActive, setModuleActive } = useModules();
-  const { classes, classesActives, setClassesActives } = useClassesApi();
+  const {
+    classes,
+    classesActives,
+    setClassesActives,
+    setClasseActive,
+    classeActive,
+  } = useClasses();
 
   const closeModal = () => {
     setIsOpen(false);
@@ -51,12 +60,30 @@ export const App = () => {
     );
     setClassesActives(modulesQuantity);
 
+    setClassTitle(false);
+    setModuleTitle(true);
+
     setModuleActive({
       name: event.currentTarget.name,
       id: event.currentTarget.id,
     });
     setShowModules(false);
     setShowClasses(true);
+  };
+
+  const handleClasseActive = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setClasseActive({
+      name: event.currentTarget.name,
+      id: event.currentTarget.id,
+      class_date: event.currentTarget.getAttribute('data-classdate'),
+      module_id: event.currentTarget.getAttribute('data-moduleid'),
+    });
+
+    setClassTitle(true);
+    setModuleTitle(false);
+
+    setShowModules(false);
+    setShowClasses(false);
   };
 
   const showModulesContent = () => {
@@ -76,19 +103,41 @@ export const App = () => {
   const showClassesContent = () => {
     return classesActives.length !== 0
       ? classesActives.map(c => (
-          <ClassesCard key={c.id} name={c.name} classDate={c.class_date} />
+          <ClassesCard
+            key={c.id}
+            id={c.id}
+            name={c.name}
+            classDate={c.class_date}
+            moduleId={c.module_id}
+            handleClasseActive={handleClasseActive}
+          />
         ))
       : !showModules && <span>Nenhuma aula encontrada :(</span>;
   };
 
   const handleMoveBack = () => {
-    setModuleActive({
-      name: 'Módulos',
-      id: '',
-    });
-    setShowModules(true);
-    setShowClasses(false);
-    setShowEditForm(false);
+    if (moduleTitle) {
+      setModuleActive({
+        name: '',
+        id: '',
+      });
+
+      setClassTitle(false);
+      setModuleTitle(false);
+
+      setShowModules(true);
+      setShowClasses(false);
+      setShowEditForm(false);
+    }
+
+    if (classTitle) {
+      setClassTitle(false);
+      setModuleTitle(true);
+
+      setShowModules(false);
+      setShowClasses(true);
+      setShowEditForm(false);
+    }
   };
 
   const handleEditModule = () => {
@@ -96,6 +145,18 @@ export const App = () => {
 
     setShowEditForm(!showEditForm);
     setShowClasses(!showClasses);
+  };
+
+  const changePageTitle = () => {
+    if (moduleTitle) {
+      return moduleActive.name;
+    }
+
+    if (classTitle) {
+      return classeActive.name;
+    }
+
+    return 'Módulos';
   };
 
   return (
@@ -108,16 +169,20 @@ export const App = () => {
 
         <section className={styles.cardsSection}>
           <h1>
-            {moduleActive.name !== 'Módulos' && (
+            {moduleTitle || classTitle ? (
               <button type="button" onClick={() => handleMoveBack()}>
                 <BiArrowBack />
               </button>
+            ) : (
+              ''
             )}
-            {moduleActive.name !== 'Módulos' ? moduleActive.name : 'Módulos'}
-            {moduleActive.name !== 'Módulos' && (
+            {changePageTitle()}
+            {moduleTitle || classTitle ? (
               <button type="button" onClick={() => handleEditModule()}>
                 <AiFillEdit />
               </button>
+            ) : (
+              ''
             )}
           </h1>
           <div className={styles.cardsContainer}>
