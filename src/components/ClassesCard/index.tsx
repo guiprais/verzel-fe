@@ -1,22 +1,13 @@
 import styles from './styles.module.scss';
 
+import { formatDate } from '../../services/utils';
+
 type ClassesCardProps = {
   name: string;
   classDate: string;
   moduleId: string;
   id: string;
   handleClasseActive: any;
-};
-
-const formatDate = (date: string | undefined) => {
-  if (date !== undefined) {
-    const newDate = new Date(date);
-    return `${newDate.getDate()}/${
-      newDate.getMonth() + 1
-    }/${newDate.getFullYear()}`;
-  }
-
-  return date;
 };
 
 export const ClassesCard = ({

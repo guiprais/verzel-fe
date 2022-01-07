@@ -7,14 +7,8 @@ import styles from './styles.module.scss';
 
 export const EditClassForm = () => {
   const { moduleActive } = useModules();
-  const {
-    classes,
-    setClasses,
-    classeActive,
-    setClassesActives,
-    classesActives,
-    setClasseActive,
-  } = useClasses();
+  const { classeActive, setClassesActives, classesActives, setClasseActive } =
+    useClasses();
 
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
@@ -79,7 +73,7 @@ export const EditClassForm = () => {
       <span className={styles.created}>{created}</span>
 
       <button type="submit" onClick={event => handleSubmit(event)}>
-        Editar módulo
+        Editar aula
       </button>
     </form>
   );
