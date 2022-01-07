@@ -14,6 +14,7 @@ import { ClassesCard } from '../../components/ClassesCard';
 import { useModules } from '../../hooks/useModules';
 import { useClasses } from '../../hooks/useClasses';
 import { EditModuleForm } from '../../components/EditModuleForm';
+import { EditClassForm } from '../../components/EditClassForm';
 
 export const App = () => {
   const [showModules, setShowModules] = useState(true);
@@ -55,10 +56,10 @@ export const App = () => {
 
   const handleModuleActive = (event: React.MouseEvent<HTMLButtonElement>) => {
     // Função que, quando clica em um Módulo, pega o id dele, compara com o array de aulas e retorna apenas as aulas que fazem parte daquele módulo
-    const modulesQuantity = classes.filter(
+    const filteredClasses = classes.filter(
       c => c.module_id === event.currentTarget.id,
     );
-    setClassesActives(modulesQuantity);
+    setClassesActives(filteredClasses);
 
     setClassTitle(false);
     setModuleTitle(true);
@@ -131,6 +132,13 @@ export const App = () => {
     }
 
     if (classTitle) {
+      setClasseActive({
+        name: '',
+        id: '',
+        module_id: '',
+        class_date: '',
+      });
+
       setClassTitle(false);
       setModuleTitle(true);
 
@@ -140,11 +148,17 @@ export const App = () => {
     }
   };
 
-  const handleEditModule = () => {
+  const handleEditForm = () => {
     // const moduleObject = getModule(moduleActive);
 
-    setShowEditForm(!showEditForm);
-    setShowClasses(!showClasses);
+    if (moduleTitle) {
+      setShowEditForm(!showEditForm);
+      setShowClasses(!showClasses);
+    }
+
+    if (classTitle) {
+      setShowEditForm(!showEditForm);
+    }
   };
 
   const changePageTitle = () => {
@@ -157,6 +171,18 @@ export const App = () => {
     }
 
     return 'Módulos';
+  };
+
+  const changeEditForm = () => {
+    if (showEditForm && moduleTitle) {
+      return <EditModuleForm />;
+    }
+
+    if (showEditForm && classTitle) {
+      return <EditClassForm />;
+    }
+
+    return '';
   };
 
   return (
@@ -178,7 +204,7 @@ export const App = () => {
             )}
             {changePageTitle()}
             {moduleTitle || classTitle ? (
-              <button type="button" onClick={() => handleEditModule()}>
+              <button type="button" onClick={() => handleEditForm()}>
                 <AiFillEdit />
               </button>
             ) : (
@@ -188,7 +214,7 @@ export const App = () => {
           <div className={styles.cardsContainer}>
             {showModules && showModulesContent()}
             {showClasses && showClassesContent()}
-            {showEditForm && <EditModuleForm />}
+            {changeEditForm()}
           </div>
         </section>
       </div>

@@ -14,6 +14,11 @@ const api = axios.create({
     authorization: `Bearer ${token}` ?? '',
   },
 });
+interface IEditClass {
+  id: string;
+  date: string;
+  name: string;
+}
 
 export default {
   getModules: async () => {
@@ -48,6 +53,13 @@ export default {
   editModule: async ({ name, id }: { name: string; id: string }) => {
     return api
       .put(`/modules/${id}`, { name })
+      .then(response => response)
+      .catch(error => error.response.data);
+  },
+
+  editClass: async (module_id: string, { name, id, date }: IEditClass) => {
+    return api
+      .put(`/classes/${id}`, { name, module_id, class_date: date })
       .then(response => response)
       .catch(error => error.response.data);
   },
