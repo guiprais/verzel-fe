@@ -1,5 +1,6 @@
 import { MouseEvent, useState } from 'react';
 import { useModules } from '../../hooks/useModules';
+import api from '../../services/api';
 
 import styles from './styles.module.scss';
 
@@ -8,22 +9,29 @@ export const EditModuleForm = () => {
   const [error, setError] = useState('');
   const [created, setCreated] = useState('');
 
-  const { moduleActive } = useModules();
+  const { editModule, moduleActive, setModuleActive, setModules } =
+    useModules();
 
   const handleSubmit = async (event: MouseEvent) => {
     event.preventDefault();
 
-    console.log(moduleActive);
+    const editModuleResponse = await editModule({
+      ...moduleActive,
+      name: moduleName,
+    });
 
-    // const createdModuleResponse = await editModule({ moduleName });
+    if (!editModuleResponse.success) {
+      setCreated('');
+      setError(editModuleResponse.error);
+      return;
+    }
 
-    // if (!createdModuleResponse.success) {
-    //   setCreated('');
-    //   setError(createdModuleResponse.error);
-    //   return;
-    // }
-
+    setModuleActive({
+      ...moduleActive,
+      name: moduleName,
+    });
     setError('');
+    api.getModules().then(response => setModules(response.data));
     setCreated('Módulo editado com sucesso!');
   };
 

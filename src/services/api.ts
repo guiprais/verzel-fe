@@ -44,4 +44,11 @@ export default {
       .then(response => response)
       .catch(error => error.response.data);
   },
+
+  editModule: async ({ name, id }: { name: string; id: string }) => {
+    return api
+      .put(`/modules/${id}`, { name })
+      .then(response => response)
+      .catch(error => error.response.data);
+  },
 };

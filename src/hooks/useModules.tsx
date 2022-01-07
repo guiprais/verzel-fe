@@ -34,6 +34,10 @@ interface ModulesContextData {
     moduleName,
   }: CreateModuleApiProps) => Promise<{ success: boolean; error: string }>;
   getModule: GetModulesProps;
+  editModule: ({
+    id,
+    name,
+  }: ModulesProps) => Promise<{ success: boolean; error: string }>;
 }
 
 const ModulesContext = createContext<ModulesContextData>(
@@ -47,6 +51,7 @@ export const ModulesProvider = ({ children }: ModulesProviderProps) => {
     name: 'Módulos',
   });
   const [infoCreateModule, setInfoCreateModule] = useState<string>('');
+  const [infoEditModule, setInfoEditModule] = useState<string>('');
 
   const createModule = async ({ moduleName }: CreateModuleApiProps) => {
     const create = await api.createModule(moduleName);
@@ -61,10 +66,21 @@ export const ModulesProvider = ({ children }: ModulesProviderProps) => {
 
   useEffect(() => {
     api.getModules().then(response => setModules(response.data));
-  }, [infoCreateModule]);
+  }, [infoCreateModule, infoEditModule]);
 
   const getModule = (moduleName: string) => {
     return modules.find(module => module.name === moduleName);
+  };
+
+  const editModule = async ({ id, name }: ModulesProps) => {
+    const edit = await api.editModule({ id, name });
+
+    if (edit.error) {
+      setInfoEditModule('error');
+      return { success: false, error: edit.error };
+    }
+    setInfoEditModule('success');
+    return { success: true, error: '' };
   };
 
   return (
@@ -77,6 +93,7 @@ export const ModulesProvider = ({ children }: ModulesProviderProps) => {
         setModuleActive,
         createModule,
         getModule,
+        editModule,
       }}
     >
       {children}
