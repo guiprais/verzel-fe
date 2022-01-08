@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+
 import { BiArrowBack } from 'react-icons/bi';
 import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
 
@@ -39,10 +41,20 @@ export const App = () => {
     deleteClasse,
   } = useClasses();
 
+  const history = useNavigate();
+
   useEffect(() => {
     setClassesActives(classes.filter(c => c.module_id === moduleActive.id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [moduleActive, classes]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('@verzel:token');
+
+    if (!token) {
+      history('/login');
+    }
+  }, [history]);
 
   const closeModal = () => {
     setIsOpen(false);
