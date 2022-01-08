@@ -38,6 +38,8 @@ interface ModulesContextData {
     id,
     name,
   }: ModulesProps) => Promise<{ success: boolean; error: string }>;
+  deleteModule: (id: string) => Promise<{ success: boolean; error: string }>;
+  fetchModules: () => Promise<void>;
 }
 
 const ModulesContext = createContext<ModulesContextData>(
@@ -52,6 +54,7 @@ export const ModulesProvider = ({ children }: ModulesProviderProps) => {
   });
   const [infoCreateModule, setInfoCreateModule] = useState<string>('');
   const [infoEditModule, setInfoEditModule] = useState<string>('');
+  const [infoDeleteModule, setInfoDeleteModule] = useState<string>('');
 
   const createModule = async ({ moduleName }: CreateModuleApiProps) => {
     const create = await api.createModule(moduleName);
@@ -63,10 +66,6 @@ export const ModulesProvider = ({ children }: ModulesProviderProps) => {
     setInfoCreateModule('success');
     return { success: true, error: '' };
   };
-
-  useEffect(() => {
-    api.getModules().then(response => setModules(response.data));
-  }, [infoCreateModule, infoEditModule]);
 
   const getModule = (moduleName: string) => {
     return modules.find(module => module.name === moduleName);
@@ -83,6 +82,25 @@ export const ModulesProvider = ({ children }: ModulesProviderProps) => {
     return { success: true, error: '' };
   };
 
+  const deleteModule = async (id: string) => {
+    const deleteMod = await api.deleteModule(id);
+
+    if (deleteMod.error) {
+      setInfoDeleteModule('error');
+      return { success: false, error: deleteMod.error };
+    }
+    setInfoDeleteModule('success');
+    return { success: true, error: '' };
+  };
+
+  const fetchModules = async () => {
+    api.getModules().then(response => setModules(response.data));
+  };
+
+  useEffect(() => {
+    fetchModules();
+  }, [infoCreateModule, infoEditModule, infoDeleteModule]);
+
   return (
     <ModulesContext.Provider
       // eslint-disable-next-line react/jsx-no-constructed-context-values
@@ -94,6 +112,8 @@ export const ModulesProvider = ({ children }: ModulesProviderProps) => {
         createModule,
         getModule,
         editModule,
+        deleteModule,
+        fetchModules,
       }}
     >
       {children}

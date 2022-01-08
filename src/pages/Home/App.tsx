@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BiArrowBack } from 'react-icons/bi';
-import { AiFillEdit } from 'react-icons/ai';
+import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
 
 import { ModuleCard } from '../../components/ModuleCard';
 import { ModuleForm } from '../../components/ModuleForm';
@@ -15,7 +15,6 @@ import { useModules } from '../../hooks/useModules';
 import { useClasses } from '../../hooks/useClasses';
 import { EditModuleForm } from '../../components/EditModuleForm';
 import { EditClassForm } from '../../components/EditClassForm';
-import { formatDate } from '../../services/utils';
 
 export const App = () => {
   const [showModules, setShowModules] = useState(true);
@@ -27,14 +26,23 @@ export const App = () => {
   const [moduleTitle, setModuleTitle] = useState(false);
   const [classTitle, setClassTitle] = useState(false);
 
-  const { modules, moduleActive, setModuleActive } = useModules();
+  const { modules, moduleActive, setModuleActive, deleteModule, fetchModules } =
+    useModules();
   const {
     classes,
     classesActives,
     setClassesActives,
     setClasseActive,
     classeActive,
+    fetchClasses,
+    classesQuantity,
+    deleteClasse,
   } = useClasses();
+
+  useEffect(() => {
+    setClassesActives(classes.filter(c => c.module_id === moduleActive.id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [moduleActive, classes]);
 
   const closeModal = () => {
     setIsOpen(false);
@@ -50,9 +58,32 @@ export const App = () => {
     setIsOpen(true);
   };
 
-  // Função para calcular quantas aulas existem em cada módulo
-  const classesQuantity = (id: string) => {
-    return classes.filter(c => c.module_id === id).length;
+  const showHomeContentState = async () => {
+    setShowModules(true);
+    setShowClasses(false);
+
+    setModuleTitle(false);
+    setClassTitle(false);
+
+    await fetchModules();
+  };
+
+  const showModuleContentState = async () => {
+    setShowModules(false);
+    setShowClasses(true);
+
+    setModuleTitle(true);
+    setClassTitle(false);
+
+    await fetchClasses();
+  };
+
+  const showClassContentState = () => {
+    setShowModules(false);
+    setShowClasses(false);
+
+    setModuleTitle(false);
+    setClassTitle(true);
   };
 
   const handleModuleActive = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -62,15 +93,12 @@ export const App = () => {
     );
     setClassesActives(filteredClasses);
 
-    setClassTitle(false);
-    setModuleTitle(true);
+    showModuleContentState();
 
     setModuleActive({
       name: event.currentTarget.name,
       id: event.currentTarget.id,
     });
-    setShowModules(false);
-    setShowClasses(true);
   };
 
   const handleClasseActive = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -81,11 +109,7 @@ export const App = () => {
       module_id: event.currentTarget.getAttribute('data-moduleid'),
     });
 
-    setClassTitle(true);
-    setModuleTitle(false);
-
-    setShowModules(false);
-    setShowClasses(false);
+    showClassContentState();
   };
 
   const showModulesContent = () => {
@@ -124,11 +148,7 @@ export const App = () => {
         id: '',
       });
 
-      setClassTitle(false);
-      setModuleTitle(false);
-
-      setShowModules(true);
-      setShowClasses(false);
+      showHomeContentState();
       setShowEditForm(false);
     }
 
@@ -140,11 +160,7 @@ export const App = () => {
         class_date: '',
       });
 
-      setClassTitle(false);
-      setModuleTitle(true);
-
-      setShowModules(false);
-      setShowClasses(true);
+      showModuleContentState();
       setShowEditForm(false);
     }
   };
@@ -159,6 +175,31 @@ export const App = () => {
 
     if (classTitle) {
       setShowEditForm(!showEditForm);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (moduleTitle) {
+      await deleteModule(moduleActive.id);
+      alert('Módulo deletado');
+
+      showHomeContentState();
+
+      setModuleActive({ id: '', name: 'Módulos' });
+    }
+
+    if (classTitle) {
+      await deleteClasse(classeActive.id);
+      alert('Aula deletada');
+
+      setClasseActive({ id: '', name: '', class_date: '', module_id: '' });
+      fetchClasses();
+      const filteredClasses = classes.filter(
+        c => c.module_id === moduleActive.id,
+      );
+
+      setClassesActives(filteredClasses);
+      showModuleContentState();
     }
   };
 
@@ -186,7 +227,7 @@ export const App = () => {
     if (classTitle && !showEditForm) {
       return (
         <h1>
-          Data da aula: <span>{formatDate(classeActive.class_date)}</span>
+          Data da aula: <span>{classeActive.class_date}</span>
         </h1>
       );
     }
@@ -204,17 +245,26 @@ export const App = () => {
 
         <section className={styles.cardsSection}>
           <h1>
+            <div>
+              {moduleTitle || classTitle ? (
+                <button type="button" onClick={() => handleMoveBack()}>
+                  <BiArrowBack />
+                </button>
+              ) : (
+                ''
+              )}
+              {changePageTitle()}
+              {moduleTitle || classTitle ? (
+                <button type="button" onClick={() => handleEditForm()}>
+                  <AiFillEdit />
+                </button>
+              ) : (
+                ''
+              )}
+            </div>
             {moduleTitle || classTitle ? (
-              <button type="button" onClick={() => handleMoveBack()}>
-                <BiArrowBack />
-              </button>
-            ) : (
-              ''
-            )}
-            {changePageTitle()}
-            {moduleTitle || classTitle ? (
-              <button type="button" onClick={() => handleEditForm()}>
-                <AiFillEdit />
+              <button type="button" onClick={() => handleDelete()}>
+                <AiFillDelete />
               </button>
             ) : (
               ''

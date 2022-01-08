@@ -18,6 +18,12 @@ interface ClassesProviderProps {
   children: ReactNode;
 }
 
+interface ICreateModule {
+  name: string;
+  date: string;
+  modId: string;
+}
+
 interface ModulesContextData {
   classes: ClassesProps[];
   setClasses: React.Dispatch<React.SetStateAction<ClassesProps[]>>;
@@ -25,6 +31,14 @@ interface ModulesContextData {
   setClassesActives: React.Dispatch<React.SetStateAction<ClassesProps[]>>;
   setClasseActive: any;
   classeActive: any;
+  fetchClasses: () => Promise<void>;
+  classesQuantity: (id: string) => number;
+  createClasse: ({
+    name,
+    date,
+    modId,
+  }: ICreateModule) => Promise<{ success: boolean; error: string }>;
+  deleteClasse: any;
 }
 
 const ClassesContext = createContext<ModulesContextData>(
@@ -36,9 +50,45 @@ export const ClassesProvider = ({ children }: ClassesProviderProps) => {
   const [classesActives, setClassesActives] = useState<ClassesProps[]>([]);
   const [classeActive, setClasseActive] = useState<ClassesProps>();
 
-  useEffect(() => {
+  const [infoCreateClasse, setInfoCreateClasse] = useState<string>('');
+  const [infoEditClasse, setInfoEditClasse] = useState<string>('');
+  const [infoDeleteClasse, setInfoDeleteClasse] = useState<string>('');
+
+  const createClasse = async ({ name, date, modId }: ICreateModule) => {
+    const create = await api.createClass({ name, date, modId });
+
+    if (create.error) {
+      setInfoCreateClasse('error');
+      return { success: false, error: create.error };
+    }
+
+    setInfoCreateClasse('success');
+    return { success: true, error: '' };
+  };
+
+  const deleteClasse = async (id: string) => {
+    const deleteClass = await api.deleteClass(id);
+
+    if (deleteClass.error) {
+      setInfoDeleteClasse('error');
+      return { success: false, error: deleteClass.error };
+    }
+    setInfoDeleteClasse('success');
+    return { success: true, error: '' };
+  };
+
+  const fetchClasses = async () => {
     api.getClasses().then(response => setClasses(response.data));
-  }, []);
+  };
+
+  useEffect(() => {
+    fetchClasses();
+  }, [infoCreateClasse, infoEditClasse, infoDeleteClasse]);
+
+  // Função para calcular quantas aulas existem no módulo referente ao id passado como parâmetro
+  const classesQuantity = (id: string) => {
+    return classes.filter(c => c.module_id === id).length;
+  };
 
   return (
     <ClassesContext.Provider
@@ -50,6 +100,10 @@ export const ClassesProvider = ({ children }: ClassesProviderProps) => {
         setClassesActives,
         setClasseActive,
         classeActive,
+        fetchClasses,
+        classesQuantity,
+        createClasse,
+        deleteClasse,
       }}
     >
       {children}

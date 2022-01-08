@@ -63,4 +63,18 @@ export default {
       .then(response => response)
       .catch(error => error.response.data);
   },
+
+  deleteModule: async (id: string) => {
+    return api
+      .delete(`/modules/${id}`)
+      .then(response => response)
+      .catch(error => error.response.data);
+  },
+
+  deleteClass: async (id: string) => {
+    return api
+      .delete(`/classes/${id}`)
+      .then(response => response)
+      .catch(error => error.response.data);
+  },
 };

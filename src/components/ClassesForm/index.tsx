@@ -1,12 +1,11 @@
 import { MouseEvent, useState } from 'react';
 import { useClasses } from '../../hooks/useClasses';
 import { useModules } from '../../hooks/useModules';
-import api from '../../services/api';
 import styles from './styles.module.scss';
 
 export const ClassesForm = () => {
   const { modules } = useModules();
-  const { classes, setClasses } = useClasses();
+  const { createClasse, fetchClasses } = useClasses();
 
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
@@ -17,24 +16,20 @@ export const ClassesForm = () => {
   const handleSubmit = async (event: MouseEvent) => {
     event.preventDefault();
 
-    const createClass = await api.createClass({ name, date, modId });
+    const createClass = await createClasse({ name, date, modId });
 
-    if (createClass.error) {
+    if (!createClass.success) {
       setCreated('');
       setError(createClass.error);
-      return createClass;
+      return;
     }
 
-    if (createClass.status === 200) {
-      setError('');
-      setCreated('Aula criada com sucesso!');
-      setName('');
-      setDate('');
-      const newClasses = [...classes, createClass.data];
-      setClasses(newClasses);
-    }
+    setError('');
+    setCreated('Aula criada com sucesso!');
+    setName('');
+    setDate('');
 
-    return createClass;
+    fetchClasses();
   };
 
   return (

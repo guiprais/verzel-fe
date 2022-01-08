@@ -11,6 +11,9 @@
       font-weight: 300;
       margin: 2rem 0 1rem;
 
+      display: flex;
+      justify-content: space-between;
+
       button {
         background-color: transparent;
         color: var(--white);
