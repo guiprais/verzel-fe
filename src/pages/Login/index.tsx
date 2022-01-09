@@ -23,6 +23,7 @@ export const Login = () => {
     if (login.status === 200) {
       localStorage.setItem('@verzel:token', login.data.token);
       history('/');
+      window.location.reload();
     }
 
     return login;

@@ -35,9 +35,6 @@
       }
     ],
     "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": [
-      "error"
-    ],
     "react/react-in-jsx-scope": "off",
 
     "import/extensions": [
@@ -58,7 +55,9 @@
     ],
     "react/require-default-props": "off",
     "react/no-unused-prop-types": "off",
-    "camelcase": "off"
+    "camelcase": "off",
+    "no-alert": "off",
+    "@typescript-eslint/no-use-before-define": "off"
   },
   "settings": {
     "import/resolver": {
