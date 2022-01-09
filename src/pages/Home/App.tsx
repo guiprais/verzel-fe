@@ -192,6 +192,11 @@ export const App = () => {
 
   const handleDelete = async () => {
     if (moduleTitle) {
+      if (classesActives.length > 0) {
+        alert('Delete as aulas do módulo primeiro');
+        return;
+      }
+
       await deleteModule(moduleActive.id);
       alert('Módulo deletado');
 
