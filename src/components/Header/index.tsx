@@ -1,5 +1,7 @@
 import styles from './styles.module.scss';
 
+import logo from '../../images/logo_verzel.png';
+
 type Props = {
   openModuleModal: () => void;
   openClassModal: () => void;
@@ -8,7 +10,7 @@ type Props = {
 export const Header = ({ openModuleModal, openClassModal }: Props) => {
   return (
     <div className={styles.container}>
-      <h1>Logo</h1>
+      <img src={logo} alt="Logo Verzel" />
       <nav>
         <ul>
           <li>

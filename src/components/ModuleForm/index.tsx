@@ -8,7 +8,7 @@ export const ModuleForm = () => {
   const [error, setError] = useState('');
   const [created, setCreated] = useState('');
 
-  const { createModule } = useModules();
+  const { createModule, fetchModules } = useModules();
 
   const handleSubmit = async (event: MouseEvent) => {
     event.preventDefault();
@@ -23,6 +23,7 @@ export const ModuleForm = () => {
 
     setError('');
     setCreated('Módulo criado com sucesso!');
+    fetchModules();
   };
 
   return (
