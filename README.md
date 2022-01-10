@@ -44,3 +44,9 @@ ou
 yarn start
 ```
 - Acesse o endereço: `http://localhost:3000`
+
+Usuário e senha para acessar a aplicação:
+```
+admin@admin.com
+admin
+```
