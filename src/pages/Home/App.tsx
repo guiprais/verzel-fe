@@ -17,6 +17,7 @@ import { useModules } from '../../hooks/useModules';
 import { useClasses } from '../../hooks/useClasses';
 import { EditModuleForm } from '../../components/EditModuleForm';
 import { EditClassForm } from '../../components/EditClassForm';
+import { formatDate } from '../../services/utils';
 
 export const App = () => {
   const [showModules, setShowModules] = useState(true);
@@ -244,7 +245,7 @@ export const App = () => {
     if (classTitle && !showEditForm) {
       return (
         <h1>
-          Data da aula: <span>{classeActive.class_date}</span>
+          Data da aula: <span>{formatDate(classeActive.class_date)}</span>
         </h1>
       );
     }

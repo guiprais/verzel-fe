@@ -50,6 +50,19 @@ export default {
       .catch(error => error.response.data);
   },
 
+  register: async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
+    return api
+      .post('/register', { email, password })
+      .then(response => response)
+      .catch(error => error.response.data);
+  },
+
   editModule: async ({ name, id }: { name: string; id: string }) => {
     return api
       .put(`/modules/${id}`, { name })
