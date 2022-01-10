@@ -4,7 +4,7 @@ type ModuleCardProps = {
   name: string;
   classes: number;
   id: string;
-  handleModuleActive?: any;
+  handleModuleActive: (event: React.MouseEvent<HTMLButtonElement>) => void;
   // onClick?: React.MouseEventHandler<MouseEvent>;
 };
 

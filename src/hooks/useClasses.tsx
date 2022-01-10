@@ -6,6 +6,7 @@ import {
   useState,
 } from 'react';
 import api from '../services/api';
+import { useModules } from './useModules';
 
 type ClassesProps = {
   class_date: string;
@@ -38,7 +39,11 @@ interface ModulesContextData {
     date,
     modId,
   }: ICreateModule) => Promise<{ success: boolean; error: string }>;
-  deleteClasse: any;
+  deleteClasse: (id: string) => void;
+  editClasse: (
+    moduleId: string,
+    { name, date, id }: { name: string; date: string; id: string },
+  ) => Promise<{ success: boolean; error: string }>;
 }
 
 const ClassesContext = createContext<ModulesContextData>(
@@ -63,6 +68,24 @@ export const ClassesProvider = ({ children }: ClassesProviderProps) => {
     }
 
     setInfoCreateClasse('success');
+    return { success: true, error: '' };
+  };
+
+  const editClasse = async (
+    moduleId: string,
+    { name, date, id }: { name: string; date: string; id: string },
+  ) => {
+    const editClass = await api.editClass(moduleId, {
+      name,
+      date,
+      id,
+    });
+
+    if (editClass.error) {
+      setInfoEditClasse('error');
+      return { success: false, error: editClass.error };
+    }
+    setInfoEditClasse('success');
     return { success: true, error: '' };
   };
 
@@ -104,6 +127,7 @@ export const ClassesProvider = ({ children }: ClassesProviderProps) => {
         classesQuantity,
         createClasse,
         deleteClasse,
+        editClasse,
       }}
     >
       {children}

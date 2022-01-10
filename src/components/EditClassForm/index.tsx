@@ -1,14 +1,18 @@
 import { MouseEvent, useState } from 'react';
 import { useClasses } from '../../hooks/useClasses';
 import { useModules } from '../../hooks/useModules';
-import api from '../../services/api';
 
 import styles from './styles.module.scss';
 
 export const EditClassForm = () => {
   const { moduleActive } = useModules();
-  const { classeActive, setClassesActives, classesActives, setClasseActive } =
-    useClasses();
+  const {
+    classeActive,
+    setClassesActives,
+    classesActives,
+    setClasseActive,
+    editClasse,
+  } = useClasses();
 
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
@@ -18,33 +22,35 @@ export const EditClassForm = () => {
   const handleSubmit = async (event: MouseEvent) => {
     event.preventDefault();
 
-    const editClass = await api.editClass(moduleActive.id, {
+    const editClass = await editClasse(moduleActive.id, {
       name,
       date,
       id: classeActive.id,
     });
 
-    if (editClass.error) {
+    if (!editClass.success) {
       setCreated('');
       setError(editClass.error);
-      return editClass;
+      return;
     }
 
-    if (editClass.status === 200) {
-      setError('');
-      setCreated('Aula editada com sucesso!');
-      setName('');
-      setDate('');
+    setError('');
+    setCreated('Aula editada com sucesso!');
+    setName('');
+    setDate('');
 
-      setClasseActive(editClass.data);
+    const editedClasse = {
+      ...classeActive,
+      name,
+      class_date: date,
+    };
 
-      const classesActivesEditr = classesActives.filter(
-        c => c.id !== classeActive.id,
-      );
-      setClassesActives([...classesActivesEditr, editClass.data]);
-    }
+    setClasseActive(editedClasse);
 
-    return editClass;
+    const classesActivesEditr = classesActives.filter(
+      c => c.id !== classeActive.id,
+    );
+    setClassesActives([...classesActivesEditr, editedClasse]);
   };
 
   return (

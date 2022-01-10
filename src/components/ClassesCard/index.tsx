@@ -22,7 +22,7 @@ export const ClassesCard = ({
       type="button"
       className={styles.container}
       id={id}
-      data-classdate={formatDate(classDate)}
+      data-classdate={classDate}
       data-moduleid={moduleId}
       name={name}
       onClick={event => handleClasseActive(event)}
