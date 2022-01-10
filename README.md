@@ -1,4 +1,4 @@
-# Teste Prático Fullstack JS - Backend
+# Teste Prático Fullstack JS - Frontend
 
 ## Proposta de soluçåo
 
