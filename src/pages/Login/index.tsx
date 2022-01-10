@@ -1,5 +1,6 @@
 import { MouseEvent, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import styles from './styles.module.scss';
 
@@ -52,6 +53,13 @@ export const Login = () => {
           />
         </label>
         <span className={styles.error}>{error}</span>
+        <span>
+          Para criar uma conta, clique{' '}
+          <Link to="/register">
+            <span style={{ color: 'red' }}>aqui</span>
+          </Link>
+          .
+        </span>
         <button type="submit" onClick={event => handleSubmit(event)}>
           Entrar
         </button>
